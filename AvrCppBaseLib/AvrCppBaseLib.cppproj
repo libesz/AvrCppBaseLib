@@ -165,10 +165,10 @@
     <Compile Include="AntiPrell.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="BlinkingLed.cpp">
+    <Compile Include="TimedOutput.cpp">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="BlinkingLed.h">
+    <Compile Include="TimedOutput.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="SoftTimer.cpp">

@@ -1,32 +1,32 @@
 /* 
-* BlinkingLed.cpp
+* TimedOutput.cpp
 *
 * Created: 3/28/2015 9:18:40 PM
 * Author: huszty
 */
 
-#include "BlinkingLed.h"
+#include "TimedOutput.h"
 #include "Uart.h"
 
-BlinkingLed::BlinkingLed(volatile void *newPort,
+TimedOutput::TimedOutput(volatile void *newPort,
                          unsigned char newMask,
                          unsigned short newLightTime): SoftTimerHandler(false, false, true),
                                                        port((volatile unsigned char *)newPort),
                                                        mask(newMask),
                                                        lightTime(newLightTime) {
-  PUTS("BlinkingLed::BlinkingLed()");NL();
+  PUTS("TimedOutput::TimedOutput()");NL();
 }
 
-BlinkingLed::~BlinkingLed() {
+TimedOutput::~TimedOutput() {
 }
 
-void BlinkingLed::start() {
-  //PUTS("BlinkingLed::start()");NL();
+void TimedOutput::start() {
+  //PUTS("TimedOutput::start()");NL();
   *port |= mask;
   myTimer.set(lightTime);
 }
 
-void BlinkingLed::handleTimeout() {
-  //PUTS("BlinkingLed::handleTimeout()");NL();
+void TimedOutput::handleTimeout() {
+  //PUTS("TimedOutput::handleTimeout()");NL();
   *port &= ~mask;
 }
