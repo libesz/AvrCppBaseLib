@@ -20,7 +20,7 @@ private:
 	SoftTimerSet& operator=( const SoftTimerSet &c );
 
 public:
-	SoftTimerSet() = default;
+	SoftTimerSet(){}
 	~SoftTimerSet(){}
   void add(SoftTimerHandler* handler) {
     if(used<T_SIZE) {
