@@ -5,12 +5,12 @@
 * Author: huszty
 */
 
-#include "AntiPrell.h"
+#include "Debouncer.h"
 #include "Uart.h"
 
-AntiPrell::AntiPrell(volatile void *newPort,
+Debouncer::Debouncer(volatile void *newPort,
                      unsigned char newMask,
-                     AntiPrellUser *newUser): SoftTimerHandler(true, false, true),
+                     DebouncerUser *newUser): SoftTimerHandler(true, false, true),
                                               port((volatile unsigned char *)newPort),
                                               mask(newMask),
                                               user(newUser) {
@@ -19,15 +19,15 @@ AntiPrell::AntiPrell(volatile void *newPort,
   //PUTS("AntiPrell::AntiPrell "); PUTI(lastInputState); PUTI(currentInputState); NL();
 }
 
-AntiPrell::~AntiPrell() {
+Debouncer::~Debouncer() {
 }
 
-void AntiPrell::handleTimeout() {
+void Debouncer::handleTimeout() {
 	//PUTS("AntiPrell::handleTimeout "); PUTI(lastInputState); PUTI(currentInputState); NL();
   lastInputState = currentInputState;
 }
 
-unsigned short AntiPrell::handleTimerSet(unsigned short oldValue, unsigned short newValue) {
+unsigned short Debouncer::handleTimerSet(unsigned short oldValue, unsigned short newValue) {
   //PUTS("AntiPrell::handleTimerSet "); PUTI(lastInputState); PUTI(currentInputState); NL();
   if(lastInputState && !currentInputState) {
     //PUTS("AntiPrell::handleSet calling user"); NL();
@@ -37,7 +37,7 @@ unsigned short AntiPrell::handleTimerSet(unsigned short oldValue, unsigned short
   return newValue;
 }
 
-void AntiPrell::inputChanged(){
+void Debouncer::inputChanged(){
   currentInputState = *port & mask;
   //PUTS("AntiPrell::inputChanged "); PUTI(lastInputState); PUTI(currentInputState); NL();
   if(!myTimer.get())

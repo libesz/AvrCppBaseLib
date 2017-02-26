@@ -6,31 +6,31 @@
 */
 
 
-#ifndef __ANTIPRELL_H__
-#define __ANTIPRELL_H__
+#ifndef __DEBOUNCER_H__
+#define __DEBOUNCER_H__
 
 #include "SoftTimer.h"
 #define ANTI_PRELL_TIMEOUT 10
 
-class AntiPrellUser {
+class DebouncerUser {
 public:
   virtual void buttonPressed() = 0;
 };
 
-class AntiPrell: public SoftTimerHandler {
+class Debouncer: public SoftTimerHandler {
   volatile unsigned char *port;
   unsigned char mask;
-  AntiPrellUser *user;
+  DebouncerUser *user;
   unsigned char currentInputState;
   unsigned char lastInputState;
-	AntiPrell( const AntiPrell &c );
-	AntiPrell& operator=( const AntiPrell &c );
+	Debouncer( const Debouncer &c );
+	Debouncer& operator=( const Debouncer &c );
 public:
-	AntiPrell(volatile void *newPort, unsigned char newMask, AntiPrellUser *newUser);
-	~AntiPrell();
+	Debouncer(volatile void *newPort, unsigned char newMask, DebouncerUser *newUser);
+	~Debouncer();
   void inputChanged();
   void handleTimeout();
   unsigned short handleTimerSet(unsigned short oldValue, unsigned short newValue);
 };
 
-#endif //__ANTIPRELL_H__
+#endif //__DEBOUNCER_H__

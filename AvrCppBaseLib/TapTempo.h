@@ -9,7 +9,7 @@
 #ifndef __TAPTEMPO_H__
 #define __TAPTEMPO_H__
 
-#include "AntiPrell.h"
+#include "Debouncer.h"
 #include "SoftTimer.h"
 
 #ifndef TAPTEMPOTIMEOUT
@@ -21,7 +21,7 @@ public:
   virtual void handleTapTempo(unsigned short value);
 };
 
-class TapTempo: public AntiPrellUser, public SoftTimerHandler {
+class TapTempo: public DebouncerUser, public SoftTimerHandler {
   unsigned short lastTapTime;
   TapTempoHandler *tapTempoHandler;
 	TapTempo( const TapTempo &c );
