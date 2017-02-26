@@ -6,7 +6,7 @@
 */
 
 #include "SoftTimer.h"
-#include "Usart.h"
+#include "Uart.h"
 
 SoftTimer::SoftTimer(SoftTimerHandler *newHandler,
                      bool useSet,

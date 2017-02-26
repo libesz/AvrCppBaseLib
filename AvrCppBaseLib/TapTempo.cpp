@@ -6,7 +6,7 @@
 */
 
 #include "TapTempo.h"
-#include "Usart.h"
+#include "Uart.h"
 
 TapTempo::TapTempo(TapTempoHandler *newTapTempoHandler): SoftTimerHandler(true, false, false),
                                                               lastTapTime(TAPTEMPOTIMEOUT),

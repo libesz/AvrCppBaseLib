@@ -7,8 +7,8 @@
 //#define DEBUG 1
 #undef DEBUG
 
-#ifndef __USART_H__
-#define __USART_H__
+#ifndef __UART_H__
+#define __UART_H__
 
 #include <avr/pgmspace.h>
 
@@ -43,4 +43,4 @@ private:
   #define PUTS(x)
   #define PUTI(x)
 #endif
-#endif //__USART_H__
+#endif //__UART_H__

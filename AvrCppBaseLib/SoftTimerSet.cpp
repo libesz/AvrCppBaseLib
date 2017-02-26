@@ -6,7 +6,7 @@
 */
 
 #include "SoftTimerSet.h"
-#include "Usart.h"
+#include "Uart.h"
 
 SoftTimerSet::SoftTimerSet() {
 }

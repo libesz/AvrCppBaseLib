@@ -6,7 +6,7 @@
 */
 
 #include "BlinkingLed.h"
-#include "Usart.h"
+#include "Uart.h"
 
 BlinkingLed::BlinkingLed(volatile void *newPort,
                          unsigned char newMask,

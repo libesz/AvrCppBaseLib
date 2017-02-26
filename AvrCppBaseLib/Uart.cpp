@@ -5,7 +5,7 @@
 * Author: huszty
 */
 
-#include "Usart.h"
+#include "Uart.h"
 #include <stdlib.h>
 #include <avr/io.h>
 #include <avr/pgmspace.h>

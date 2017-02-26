@@ -6,7 +6,7 @@
 */
 
 #include "AntiPrell.h"
-#include "Usart.h"
+#include "Uart.h"
 
 AntiPrell::AntiPrell(volatile void *newPort,
                      unsigned char newMask,

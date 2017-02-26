@@ -7,7 +7,7 @@
 
 #include <avr/io.h>
 #include "AnalogInputSource.h"
-#include "Usart.h"
+#include "Uart.h"
 
 bool AnalogInputSource::exists = false;
 
