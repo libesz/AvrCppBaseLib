@@ -10,6 +10,18 @@
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 
+#ifndef UCSR0A
+  #ifdef UCSRA
+    #define UCSR0A UCSRA
+    #define UDRE0 UDRE
+    #define UDR0 UDR
+  #else
+    #ifdef USICS0
+      #error "USI is not yet supported. If you don't need UART, exclude this file from compilation."
+    #endif
+  #endif
+#endif
+
 void Usart::putc( unsigned char c ) {
   while ((UCSR0A & (1 << UDRE0)) == 0);
   UDR0 = c;
