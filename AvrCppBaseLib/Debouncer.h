@@ -1,5 +1,5 @@
 /* 
-* AntiPrell.h
+* Debouncer.h
 *
 * Created: 3/27/2015 9:19:15 PM
 * Author: huszty
@@ -11,13 +11,9 @@
 
 #include "SoftTimer.h"
 #include <stdint.h>
-#define DEBOUNCER_DEFAULT_TIMEOUT 10
+#define DEBOUNCER_DEFAULT_TIMEOUT 3
 #define DEBOUNCER_DEFAULT_REPEAT_FIRST_TIMEOUT 100
 #define DEBOUNCER_DEFAULT_REPEAT_TIMEOUT 20
-
-#define _DEBOUNCER_REPEAT_STATE_NONE 0
-#define _DEBOUNCER_REPEAT_STATE_FIRST 1
-#define _DEBOUNCER_REPEAT_STATE_NTH 2
 
 class DebouncerUser {
 public:
@@ -25,13 +21,14 @@ public:
 };
 
 class Debouncer: public SoftTimerHandler {
+  enum repeatStates {None, First, Nth};
   DebouncerUser *user;
   uint8_t currentInputState;
   uint8_t lastInputState;
   uint8_t timeout;
   uint8_t repeatFirstTimeout;
   uint8_t repeatTimeout;
-  uint8_t repeatState;
+  repeatStates repeatState;
 	Debouncer( const Debouncer &c );
 	Debouncer& operator=( const Debouncer &c );
 public:
