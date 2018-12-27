@@ -26,31 +26,66 @@
 #define MAX7219_DIGIT1            0x02
 #define MAX7219_DIGIT2            0x03
 
-#define MAX7219_CHAR_BLANK        0xF 
-#define MAX7219_CHAR_NEGATIVE     0xA 
+#define MAX7219_CHAR_BLANK        0
+#define MAX7219_CHAR_NEGATIVE     0b0000001
 
 #include <avr/io.h>
+#include <string.h>
 #include "Max7219.h"
+
+const uint8_t g_num_faces[10] = {
+  //    abcdefg
+  0b1111110,
+  0b0110000,
+  0b1101101,
+  0b1111001,
+  0b0110011,
+  0b1011011,
+  0b1011111,
+  0b1110000,
+  0b1111111,
+  0b1111011
+};
 
 Max7219::Max7219(uint8_t newDigitsInUse,
                  uint8_t newSsPin,
                  uint8_t newRefreshTime): SoftTimerHandler(false, false, true),
                                           digitsInUse(newDigitsInUse), SsPin(newSsPin), refreshTime(newRefreshTime),
-                                          number(0), prevNumber(0), dotPlace(0) {
+                                          content(), prevContent() {
     myTimer.set(refreshTime);
     init();
 }
 
 void Max7219::handleTimeout() {
-  if(prevNumber != number) {
+  if(memcmp(content, prevContent, 8)) {
     applyContent();
   }    
   myTimer.set(refreshTime);
 }
 
-void Max7219::setNumber(int32_t newNumber, uint8_t newDotPlace) {
-  number = newNumber;
-  dotPlace = newDotPlace;
+void Max7219::setNumber(int32_t number, uint8_t dotPlace) {
+    char negative = 0;
+    if (number < 0) {
+      negative = 1;
+      number *= -1;
+    }
+
+    uint8_t i = 0;
+    do {
+      uint8_t data = g_num_faces[number % 10];
+      if (i == dotPlace) {
+        data |= (1<<7);
+      }
+      content[i++] = data;
+      number /= 10;
+    } while (number);
+
+    if (negative) {
+      content[i++] = MAX7219_CHAR_NEGATIVE;
+    }
+    do {
+      content[i++] = MAX7219_CHAR_BLANK;
+    } while (i<digitsInUse);
 }
 
 void Max7219::spiSendByte(char databyte) {
@@ -78,57 +113,13 @@ void Max7219::clearDisplay() {
 	} while (--i);
 }
 
-/*void MAX7219_clearDisplayRaw()
-{
-	char i = digitsInUse;
-	// Loop until 0, but don't run for zero
-	do {
-		// Set each display in use to blank
-		MAX7219_writeData(i, 0);
-	} while (--i);
-}*/
-
 void Max7219::applyContent() {
-    char negative = 0;
-
-    prevNumber = number;
-    int32_t tempNumber = number;
-    if (tempNumber < 0) {
-        negative = 1;
-        tempNumber *= -1;
-    }
-
-    char i = 0; 
+    uint8_t i = 0;
     do {
-		  uint8_t data = tempNumber % 10;
-		  if (i == dotPlace) {
-			  data |= (1<<7);
-		  }
-      writeData(++i, data);
-      tempNumber /= 10;
-    } while (tempNumber);
-
-    if (negative) {
-        writeData(++i, MAX7219_CHAR_NEGATIVE);
-    }
-    do {
-	    writeData(++i, MAX7219_CHAR_BLANK);
+      writeData(++i, content[i]);
     } while (i<digitsInUse);
+    memcpy(prevContent, content, 8);
 }
-
-/*unsigned const char g_num_faces[11] = {
-	//    abcdefg
-	0b1111110,
-	0b0110000,
-	0b1101101,
-	0b1111001,
-	0b0110011,
-	0b1011011,
-	0b1011111,
-	0b1110000,
-	0b1111111,
-	0b1111011,
-	0b11000000};*/
 
 void Max7219::init() {
 	// SCK MOSI CS/LOAD/SS
@@ -137,10 +128,8 @@ void Max7219::init() {
   // SPI Enable, Master mode
   SPCR |= (1 << SPE) | (1 << MSTR)| (1<<SPR1);
 
-  // Decode mode to "Font Code-B"
-  writeData(MAX7219_MODE_DECODE, 0xFF);
   // Decode mode to "No Decode"
-  //MAX7219_writeData(MAX7219_MODE_DECODE, 0x00);
+  writeData(MAX7219_MODE_DECODE, 0x00);
   // Scan limit runs from 0.
   writeData(MAX7219_MODE_SCAN_LIMIT, digitsInUse - 1);
   writeData(MAX7219_MODE_INTENSITY, 8);

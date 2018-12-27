@@ -15,9 +15,8 @@ class Max7219: public SoftTimerHandler {
   uint8_t digitsInUse;
   uint8_t SsPin;
   uint8_t refreshTime;
-  int32_t number;
-  int32_t prevNumber;
-  uint8_t dotPlace;
+  uint8_t content[8];
+  uint8_t prevContent[8];
   inline void spiSendByte(char);
   inline void writeData(char, char);
 public:
@@ -26,7 +25,7 @@ public:
   void init();
   void applyContent();
   void clearDisplay();
-  void setNumber(int32_t newNumber, uint8_t newDotPlace);
+  void setNumber(int32_t newNumber, uint8_t newDotPlace = 8);
 };
 
 #endif /* MAX7219_H_ */
