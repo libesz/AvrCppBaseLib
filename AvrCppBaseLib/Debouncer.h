@@ -11,7 +11,13 @@
 
 #include "SoftTimer.h"
 #include <stdint.h>
-#define ANTI_PRELL_TIMEOUT 10
+#define DEBOUNCER_DEFAULT_TIMEOUT 10
+#define DEBOUNCER_DEFAULT_REPEAT_FIRST_TIMEOUT 100
+#define DEBOUNCER_DEFAULT_REPEAT_TIMEOUT 20
+
+#define _DEBOUNCER_REPEAT_STATE_NONE 0
+#define _DEBOUNCER_REPEAT_STATE_FIRST 1
+#define _DEBOUNCER_REPEAT_STATE_NTH 2
 
 class DebouncerUser {
 public:
@@ -22,11 +28,17 @@ class Debouncer: public SoftTimerHandler {
   DebouncerUser *user;
   uint8_t currentInputState;
   uint8_t lastInputState;
-  uint8_t repeat;
+  uint8_t timeout;
+  uint8_t repeatFirstTimeout;
+  uint8_t repeatTimeout;
+  uint8_t repeatState;
 	Debouncer( const Debouncer &c );
 	Debouncer& operator=( const Debouncer &c );
 public:
-	Debouncer(DebouncerUser *newUser);
+	Debouncer(DebouncerUser *newUser,
+            uint8_t newTimeout = DEBOUNCER_DEFAULT_TIMEOUT,
+            uint8_t newRepeatFirstTimeout = DEBOUNCER_DEFAULT_REPEAT_FIRST_TIMEOUT,
+            uint8_t newRepeatTimeout = DEBOUNCER_DEFAULT_REPEAT_TIMEOUT);
 	~Debouncer();
   void inputChanged(uint8_t);
   void handleTimeout();
