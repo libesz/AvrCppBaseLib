@@ -23,6 +23,7 @@ class Debouncer: public SoftTimerHandler {
   DebouncerUser *user;
   unsigned char currentInputState;
   unsigned char lastInputState;
+  unsigned char repeat;
 	Debouncer( const Debouncer &c );
 	Debouncer& operator=( const Debouncer &c );
 public:
