@@ -8,14 +8,10 @@
 #include "Debouncer.h"
 #include "Uart.h"
 
-Debouncer::Debouncer(volatile void *newPort,
-                     unsigned char newMask,
-                     DebouncerUser *newUser): SoftTimerHandler(true, false, true),
-                                              port((volatile unsigned char *)newPort),
-                                              mask(newMask),
+Debouncer::Debouncer(DebouncerUser *newUser): SoftTimerHandler(true, false, true),
                                               user(newUser),
-											  repeat(0) {
-  lastInputState = *port & mask;
+											                        repeat(0) {
+  lastInputState = 1;
   currentInputState = lastInputState;
   //PUTS("AntiPrell::AntiPrell "); PUTI(lastInputState); PUTI(currentInputState); NL();
 }
@@ -26,18 +22,20 @@ Debouncer::~Debouncer() {
 void Debouncer::handleTimeout() {
 	//PUTS("AntiPrell::handleTimeout "); PUTI(lastInputState); PUTI(currentInputState); NL();
   lastInputState = currentInputState;
-  if(repeat && !lastInputState) {
+  if(repeat) {
     user->buttonPressed();
-    myTimer.set(10);
+  }
+  if(!lastInputState) {
+    myTimer.set(100);
+    repeat = 1;
   }
 }
 
-unsigned short Debouncer::handleTimerSet(unsigned short oldValue, unsigned short newValue) {
+unsigned short Debouncer::handleTimerSet(uint16_t oldValue, uint16_t newValue) {
   //PUTS("AntiPrell::handleTimerSet "); PUTI(lastInputState); PUTI(currentInputState); NL();
   if(!repeat && lastInputState && !currentInputState) {
     //PUTS("AntiPrell::handleSet calling user"); NL();
     user->buttonPressed();
-    repeat = 1;
   }
   if(!lastInputState && currentInputState) {
     repeat = 0;
@@ -45,9 +43,9 @@ unsigned short Debouncer::handleTimerSet(unsigned short oldValue, unsigned short
   return newValue;
 }
 
-void Debouncer::inputChanged(){
-  currentInputState = *port & mask;
+void Debouncer::inputChanged(uint8_t newCurrentInputState){
+  currentInputState = newCurrentInputState;
   //PUTS("AntiPrell::inputChanged "); PUTI(lastInputState); PUTI(currentInputState); NL();
-  if(!myTimer.get())
+  if(!myTimer.get() || repeat)
     myTimer.set(ANTI_PRELL_TIMEOUT);
 }

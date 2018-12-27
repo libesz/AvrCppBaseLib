@@ -10,6 +10,7 @@
 #define __DEBOUNCER_H__
 
 #include "SoftTimer.h"
+#include <stdint.h>
 #define ANTI_PRELL_TIMEOUT 10
 
 class DebouncerUser {
@@ -18,20 +19,18 @@ public:
 };
 
 class Debouncer: public SoftTimerHandler {
-  volatile unsigned char *port;
-  unsigned char mask;
   DebouncerUser *user;
-  unsigned char currentInputState;
-  unsigned char lastInputState;
-  unsigned char repeat;
+  uint8_t currentInputState;
+  uint8_t lastInputState;
+  uint8_t repeat;
 	Debouncer( const Debouncer &c );
 	Debouncer& operator=( const Debouncer &c );
 public:
-	Debouncer(volatile void *newPort, unsigned char newMask, DebouncerUser *newUser);
+	Debouncer(DebouncerUser *newUser);
 	~Debouncer();
-  void inputChanged();
+  void inputChanged(uint8_t);
   void handleTimeout();
-  unsigned short handleTimerSet(unsigned short oldValue, unsigned short newValue);
+  unsigned short handleTimerSet(uint16_t oldValue, uint16_t newValue);
 };
 
 #endif //__DEBOUNCER_H__
