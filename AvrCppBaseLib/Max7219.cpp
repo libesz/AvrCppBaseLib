@@ -52,7 +52,9 @@ Max7219::Max7219(uint8_t newDigitsInUse,
                  uint8_t newRefreshTime): SoftTimerHandler(false, false, true),
                                           digitsInUse(newDigitsInUse), SsPin(newSsPin), refreshTime(newRefreshTime),
                                           content(), prevContent() {
-    myTimer.set(refreshTime);
+    if(refreshTime) {
+      myTimer.set(refreshTime);
+    }      
     init();
 }
 
@@ -116,7 +118,8 @@ void Max7219::clearDisplay() {
 void Max7219::applyContent() {
     uint8_t i = 0;
     do {
-      writeData(++i, content[i]);
+      uint8_t item = content[i];
+      writeData(++i, item);
     } while (i<digitsInUse);
     memcpy(prevContent, content, 8);
 }
