@@ -59,9 +59,7 @@ Max7219::Max7219(uint8_t newDigitsInUse,
 }
 
 void Max7219::handleTimeout() {
-  if(memcmp(content, prevContent, 8)) {
-    applyContent();
-  }    
+  applyContent();
   myTimer.set(refreshTime);
 }
 
@@ -119,7 +117,11 @@ void Max7219::applyContent() {
     uint8_t i = 0;
     do {
       uint8_t item = content[i];
-      writeData(++i, item);
+      if(prevContent[i] != item) {
+        writeData(++i, item);
+      } else {
+        i++;
+      }
     } while (i<digitsInUse);
     memcpy(prevContent, content, 8);
 }
