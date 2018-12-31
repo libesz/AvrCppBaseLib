@@ -52,10 +52,10 @@ Max7219::Max7219(uint8_t newDigitsInUse,
                  uint8_t newRefreshTime): SoftTimerHandler(false, false, true),
                                           digitsInUse(newDigitsInUse), SsPin(newSsPin), refreshTime(newRefreshTime),
                                           content(), prevContent() {
+    init();
     if(refreshTime) {
       myTimer.set(refreshTime);
     }      
-    init();
 }
 
 void Max7219::handleTimeout() {
@@ -63,14 +63,17 @@ void Max7219::handleTimeout() {
   myTimer.set(refreshTime);
 }
 
-void Max7219::setNumber(int32_t number, uint8_t dotPlace) {
+void Max7219::setNumber(int32_t number, uint8_t offset, uint8_t dotPlace) {
+    if(offset>digitsInUse)
+      return;
     char negative = 0;
     if (number < 0) {
       negative = 1;
       number *= -1;
     }
 
-    uint8_t i = 0;
+    uint8_t i = offset;
+    dotPlace += offset;
     do {
       uint8_t data = g_num_faces[number % 10];
       if (i == dotPlace) {
@@ -78,9 +81,9 @@ void Max7219::setNumber(int32_t number, uint8_t dotPlace) {
       }
       content[i++] = data;
       number /= 10;
-    } while (number);
+    } while (number && i<digitsInUse);
 
-    if (negative) {
+    if (negative && i<digitsInUse) {
       content[i++] = MAX7219_CHAR_NEGATIVE;
     }
     do {
@@ -88,14 +91,14 @@ void Max7219::setNumber(int32_t number, uint8_t dotPlace) {
     } while (i<digitsInUse);
 }
 
-void Max7219::spiSendByte(char databyte) {
+void Max7219::spiSendByte(uint8_t databyte) {
     // Copy data into the SPI data register
     SPDR = databyte;
     // Wait until transfer is complete
     while (!(SPSR & (1 << SPIF)));
 }
 
-void Max7219::writeData(char data_register, char data) {  
+void Max7219::writeData(uint8_t data_register, uint8_t data) {  
   PORTB &= ~(1<<SsPin);
   // Send the register where the data will be stored
   spiSendByte(data_register);
@@ -105,12 +108,7 @@ void Max7219::writeData(char data_register, char data) {
 }
 
 void Max7219::clearDisplay() {
-	char i = digitsInUse;
-	// Loop until 0, but don't run for zero
-	do {
-		// Set each display in use to blank
-		writeData(i, MAX7219_CHAR_BLANK);
-	} while (--i);
+  memset(content, MAX7219_CHAR_BLANK, digitsInUse);
 }
 
 void Max7219::applyContent() {
@@ -123,7 +121,7 @@ void Max7219::applyContent() {
         i++;
       }
     } while (i<digitsInUse);
-    memcpy(prevContent, content, 8);
+    memcpy(prevContent, content, digitsInUse);
 }
 
 void Max7219::init() {
@@ -137,8 +135,11 @@ void Max7219::init() {
   writeData(MAX7219_MODE_DECODE, 0x00);
   // Scan limit runs from 0.
   writeData(MAX7219_MODE_SCAN_LIMIT, digitsInUse - 1);
-  writeData(MAX7219_MODE_INTENSITY, 8);
+  writeData(MAX7219_MODE_INTENSITY, 4);
   writeData(MAX7219_MODE_POWER, ON);
 	clearDisplay();
+	for(uint8_t i=0; i<digitsInUse; i++) {
+	  writeData(i+1, MAX7219_CHAR_BLANK);
+	}
 }
 
