@@ -9,6 +9,8 @@
 #ifndef __SOFTTIMER_H__
 #define __SOFTTIMER_H__
 
+#include "CppStubs.h"
+
 #define SET_EVENT_MASK 0x01
 #define RESET_EVENT_MASK 0x02
 #define TIMEOUT_EVENT_MASK 0x04

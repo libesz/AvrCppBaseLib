@@ -8,6 +8,7 @@
 #ifndef __TIMEDOUTPUT_H__
 #define __TIMEDOUTPUT_H__
 
+#include "CppStubs.h"
 #include "SoftTimer.h"
 
 class TimedOutput: public SoftTimerHandler {

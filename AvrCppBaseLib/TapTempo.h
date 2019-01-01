@@ -9,6 +9,7 @@
 #ifndef __TAPTEMPO_H__
 #define __TAPTEMPO_H__
 
+#include "CppStubs.h"
 #include "Debouncer.h"
 #include "SoftTimer.h"
 

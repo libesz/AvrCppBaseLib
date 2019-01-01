@@ -9,14 +9,15 @@
 #ifndef MAX7219_H_
 #define MAX7219_H_
 
+#include "CppStubs.h"
 #include "SoftTimer.h"
 
 class Max7219: public SoftTimerHandler {
   uint8_t digitsInUse;
   uint8_t SsPin;
   uint8_t refreshTime;
-  uint8_t content[7];
-  uint8_t prevContent[7];
+  uint8_t content[8];
+  uint8_t prevContent[8];
   inline void spiSendByte(uint8_t);
   inline void writeData(uint8_t, uint8_t);
 public:

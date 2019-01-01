@@ -9,6 +9,7 @@
 #ifndef __DEBOUNCER_H__
 #define __DEBOUNCER_H__
 
+#include "CppStubs.h"
 #include "SoftTimer.h"
 #include <stdint.h>
 #define DEBOUNCER_DEFAULT_TIMEOUT 3
