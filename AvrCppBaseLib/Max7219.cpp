@@ -91,6 +91,10 @@ void Max7219::setNumber(int32_t number, uint8_t offset, uint8_t dotPlace) {
     } while (i<digitsInUse);
 }
 
+void Max7219::setRaw(int8_t data, uint8_t offset) {
+  content[offset] = data;
+}
+
 void Max7219::spiSendByte(uint8_t databyte) {
     // Copy data into the SPI data register
     SPDR = databyte;
