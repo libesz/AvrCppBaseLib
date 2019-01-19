@@ -12,6 +12,7 @@
 #include <stdint.h>
 #include <avr/eeprom.h>
 #include <util/crc16.h>
+#include "CppStubs.h"
 
 static void* nextEepromAddress = 0;
 
