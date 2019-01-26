@@ -95,7 +95,7 @@ void Max7219::setRawChar(int8_t data, uint8_t offset) {
   content[offset] = data;
 }
 
-void Max7219::setString(char *str, uint8_t startAt) {
+void Max7219::setString(const char *str, uint8_t startAt) {
   uint8_t i = 0;
   while(((startAt + i) < 8) && i < strlen(str)) {
     content[7-(startAt+i)] = SevenSegmentASCII[str[i]-32];
