@@ -34,7 +34,7 @@
 #include "Max7219.h"
 
 const uint8_t g_num_faces[10] = {
-  //    abcdefg
+  //abcdefg
   0b1111110,
   0b0110000,
   0b1101101,
@@ -91,8 +91,16 @@ void Max7219::setNumber(int32_t number, uint8_t offset, uint8_t dotPlace) {
     } while (i<digitsInUse);
 }
 
-void Max7219::setRaw(int8_t data, uint8_t offset) {
+void Max7219::setRawChar(int8_t data, uint8_t offset) {
   content[offset] = data;
+}
+
+void Max7219::setString(char *str, uint8_t startAt) {
+  uint8_t i = 0;
+  while(((startAt + i) < 8) && i < strlen(str)) {
+    content[7-(startAt+i)] = SevenSegmentASCII[str[i]-32];
+    i++;
+  }
 }
 
 void Max7219::spiSendByte(uint8_t databyte) {
