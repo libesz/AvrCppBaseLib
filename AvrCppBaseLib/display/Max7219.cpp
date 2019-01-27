@@ -33,20 +33,6 @@
 #include <string.h>
 #include "Max7219.h"
 
-const uint8_t g_num_faces[10] = {
-  //abcdefg
-  0b1111110,
-  0b0110000,
-  0b1101101,
-  0b1111001,
-  0b0110011,
-  0b1011011,
-  0b1011111,
-  0b1110000,
-  0b1111111,
-  0b1111011
-};
-
 Max7219::Max7219(uint8_t newDigitsInUse,
                  uint8_t newSsPin,
                  uint8_t newRefreshTime): SoftTimerHandler(false, false, true),
@@ -75,7 +61,7 @@ void Max7219::setNumber(int32_t number, uint8_t offset, uint8_t minimumDigits) {
     
     uint8_t i = offset;
     do {
-      uint8_t data = g_num_faces[number % 10];
+      uint8_t data = SevenSegmentASCII[(number % 10)+'0'-32];
       content[i--] = data;
       number /= 10;
       if(minimumDigits) {
@@ -84,7 +70,7 @@ void Max7219::setNumber(int32_t number, uint8_t offset, uint8_t minimumDigits) {
     } while (number && i);
     
     while(minimumDigits && i) {
-      content[i--] = g_num_faces[0];
+      content[i--] = SevenSegmentASCII['0'-32];
       minimumDigits--;
     }
     
