@@ -103,6 +103,14 @@ void Max7219::setString(const char *str, uint8_t startAt) {
   }
 }
 
+void Max7219::setDot(uint8_t place, bool state) {
+  if(state) {
+    content[7-place] |= (1<<7);
+  } else {
+    content[7-place] &= ~(1<<7);
+  }    
+}
+
 void Max7219::spiSendByte(uint8_t databyte) {
     // Copy data into the SPI data register
     SPDR = databyte;

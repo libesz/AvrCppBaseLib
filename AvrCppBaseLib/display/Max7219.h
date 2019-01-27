@@ -31,6 +31,7 @@ public:
   void setNumber(int32_t newNumber, uint8_t offset = 0, uint8_t newDotPlace = 9);
   void setRawChar(int8_t data, uint8_t offset = 0);
   void setString(const char *str, uint8_t startAt = 0);
+  void setDot(uint8_t place, bool state = true);
 };
 
 #endif /* MAX7219_H_ */
