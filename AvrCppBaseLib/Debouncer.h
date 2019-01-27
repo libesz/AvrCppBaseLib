@@ -18,12 +18,12 @@
 
 class DebouncerUser {
 public:
-  virtual void buttonPressed() = 0;
+  virtual void buttonPressed() const = 0;
 };
 
 class Debouncer: public SoftTimerHandler {
   enum repeatStates {None, First, Nth};
-  DebouncerUser *user;
+  const DebouncerUser *user;
   uint8_t currentInputState;
   uint8_t lastInputState;
   uint8_t timeout;
@@ -33,7 +33,7 @@ class Debouncer: public SoftTimerHandler {
 	Debouncer( const Debouncer &c );
 	Debouncer& operator=( const Debouncer &c );
 public:
-	Debouncer(DebouncerUser *newUser,
+	Debouncer(const DebouncerUser *newUser,
             uint8_t newTimeout = DEBOUNCER_DEFAULT_TIMEOUT,
             uint8_t newRepeatFirstTimeout = DEBOUNCER_DEFAULT_REPEAT_FIRST_TIMEOUT,
             uint8_t newRepeatTimeout = DEBOUNCER_DEFAULT_REPEAT_TIMEOUT);

@@ -8,7 +8,7 @@
 #include "Debouncer.h"
 #include "Uart.h"
 
-Debouncer::Debouncer(DebouncerUser *newUser,
+Debouncer::Debouncer(const DebouncerUser *newUser,
                      uint8_t newTimeout,
                      uint8_t newRepeatFirstTimeout,
                      uint8_t newRepeatTimeout): SoftTimerHandler(false, false, true),
