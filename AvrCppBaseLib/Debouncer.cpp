@@ -33,7 +33,7 @@ void Debouncer::handleTimeout() {
       repeatState = First;
       myTimer.set(repeatFirstTimeout);
     } else {
-      user->buttonPressed();
+      user->buttonRepeat();
       repeatState = Nth;
       myTimer.set(repeatTimeout);
     }

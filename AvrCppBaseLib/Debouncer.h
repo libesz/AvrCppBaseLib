@@ -19,6 +19,7 @@
 class DebouncerUser {
 public:
   virtual void buttonPressed() const = 0;
+  virtual void buttonRepeat() const = 0;
 };
 
 class Debouncer: public SoftTimerHandler {
