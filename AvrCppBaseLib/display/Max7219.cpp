@@ -63,7 +63,7 @@ void Max7219::handleTimeout() {
   myTimer.set(refreshTime);
 }
 
-void Max7219::setNumber(int32_t number, uint8_t offset) {
+void Max7219::setNumber(int32_t number, uint8_t offset, uint8_t minimumDigits) {
     offset = 7-offset;
     if(offset>digitsInUse)
       return;
@@ -78,8 +78,16 @@ void Max7219::setNumber(int32_t number, uint8_t offset) {
       uint8_t data = g_num_faces[number % 10];
       content[i--] = data;
       number /= 10;
-    } while (number && i<digitsInUse);
-
+      if(minimumDigits) {
+        minimumDigits--;
+      }
+    } while (number && i);
+    
+    while(minimumDigits && i) {
+      content[i--] = g_num_faces[0];
+      minimumDigits--;
+    }
+    
     if (negative && i) {
       content[i] = MAX7219_CHAR_NEGATIVE;
     }
