@@ -27,8 +27,8 @@ public:
   void handleTimeout();
   void init();
   void applyContent();
-  void clearDisplay();
-  void setNumber(int32_t newNumber, uint8_t offset = 0, uint8_t newDotPlace = 9);
+  void clearDisplay(uint8_t start = 0, uint8_t len = 8);
+  void setNumber(int32_t newNumber, uint8_t offset = 0);
   void setRawChar(int8_t data, uint8_t offset = 0);
   void setString(const char *str, uint8_t startAt = 0);
   void setDot(uint8_t place, bool state = true);

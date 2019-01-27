@@ -63,51 +63,45 @@ void Max7219::handleTimeout() {
   myTimer.set(refreshTime);
 }
 
-void Max7219::setNumber(int32_t number, uint8_t offset, uint8_t dotPlace) {
+void Max7219::setNumber(int32_t number, uint8_t offset) {
+    offset = 7-offset;
     if(offset>digitsInUse)
       return;
-    char negative = 0;
+    bool negative = false;
     if (number < 0) {
-      negative = 1;
+      negative = true;
       number *= -1;
     }
-
+    
     uint8_t i = offset;
-    dotPlace += offset;
     do {
       uint8_t data = g_num_faces[number % 10];
-      if (i == dotPlace) {
-        data |= (1<<7);
-      }
-      content[i++] = data;
+      content[i--] = data;
       number /= 10;
     } while (number && i<digitsInUse);
 
-    if (negative && i<digitsInUse) {
-      content[i++] = MAX7219_CHAR_NEGATIVE;
+    if (negative && i) {
+      content[i] = MAX7219_CHAR_NEGATIVE;
     }
-    do {
-      content[i++] = MAX7219_CHAR_BLANK;
-    } while (i<digitsInUse);
 }
 
 void Max7219::setRawChar(int8_t data, uint8_t offset) {
-  content[offset] = data;
+  content[7-offset] = data;
 }
 
 void Max7219::setString(const char *str, uint8_t startAt) {
   uint8_t i = 0;
   while(((startAt + i) < 8) && i < strlen(str)) {
-    content[7-(startAt+i)] = SevenSegmentASCII[str[i]-32];
+    content[startAt+i] = SevenSegmentASCII[str[i]-32];
     i++;
   }
 }
 
 void Max7219::setDot(uint8_t place, bool state) {
   if(state) {
-    content[7-place] |= (1<<7);
+    content[place] |= (1<<7);
   } else {
-    content[7-place] &= ~(1<<7);
+    content[place] &= ~(1<<7);
   }    
 }
 
@@ -127,8 +121,8 @@ void Max7219::writeData(uint8_t data_register, uint8_t data) {
   PORTB |= (1<<SsPin);
 }
 
-void Max7219::clearDisplay() {
-  memset(content, MAX7219_CHAR_BLANK, digitsInUse);
+void Max7219::clearDisplay(uint8_t start, uint8_t len) {
+  memset(&(content[start]), MAX7219_CHAR_BLANK, ((start+len)>digitsInUse)?(digitsInUse):(len));
 }
 
 void Max7219::applyContent() {
@@ -136,7 +130,7 @@ void Max7219::applyContent() {
     do {
       uint8_t item = content[i];
       if(prevContent[i] != item) {
-        writeData(++i, item);
+        writeData((9 - ++i), item);
       } else {
         i++;
       }
