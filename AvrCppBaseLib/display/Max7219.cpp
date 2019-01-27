@@ -20,12 +20,6 @@
 #define MAX7219_MODE_TEST         0x0F
 #define MAX7219_MODE_NOOP         0x00
 
-// I only have 3 digits, no point having the
-// rest. You could use more though.
-#define MAX7219_DIGIT0            0x01
-#define MAX7219_DIGIT1            0x02
-#define MAX7219_DIGIT2            0x03
-
 #define MAX7219_CHAR_BLANK        0
 #define MAX7219_CHAR_NEGATIVE     0b0000001
 
