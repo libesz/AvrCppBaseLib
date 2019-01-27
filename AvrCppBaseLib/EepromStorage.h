@@ -14,7 +14,7 @@
 #include <util/crc16.h>
 #include "CppStubs.h"
 
-static void* nextEepromAddress = 0;
+extern void* nextEepromAddress;
 
 template<class T> class EepromStorage {
   EepromStorage( const EepromStorage &c );
