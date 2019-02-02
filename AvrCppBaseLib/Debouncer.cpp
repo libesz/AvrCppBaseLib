@@ -27,7 +27,6 @@ Debouncer::~Debouncer() {
 
 void Debouncer::handleTimeout() {
 	//PUTS("AntiPrell::handleTimeout "); PUTI(lastInputState); PUTI(currentInputState); NL();
-  lastInputState = currentInputState;
   if(!lastInputState) {
     if(repeatState == None) {
       repeatState = First;
@@ -40,8 +39,7 @@ void Debouncer::handleTimeout() {
   }
 }
 
-void Debouncer::inputChanged(uint8_t newCurrentInputState){
-  currentInputState = newCurrentInputState;
+void Debouncer::inputChanged(uint8_t currentInputState){
   //PUTS("AntiPrell::inputChanged "); PUTI(lastInputState); PUTI(currentInputState); NL();
   if(currentInputState != lastInputState) {
     if(!currentInputState && !myTimer.get()) {
@@ -49,5 +47,6 @@ void Debouncer::inputChanged(uint8_t newCurrentInputState){
     }      
     repeatState = None;
     myTimer.set(timeout);
+    lastInputState = currentInputState;
   }
 }

@@ -5,7 +5,6 @@
 * Author: Huszty Gergo
 */
 
-
 #ifndef __SHIFTIN_H__
 #define __SHIFTIN_H__
 
