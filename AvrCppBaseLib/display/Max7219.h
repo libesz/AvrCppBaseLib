@@ -11,6 +11,7 @@
 
 #include "CppStubs.h"
 #include "SoftTimer.h"
+#include "avr/pgmspace.h"
 
 #include "7-Segment-ASCII_SYM.txt"
 

@@ -33,7 +33,7 @@
 #define _B  0x20
 #define _A  0x40
  
-const uint8_t SevenSegmentASCII[96] = {
+const uint8_t SevenSegmentASCII[96] PROGMEM = {
 	 0                              , /* (space) */
 	 _DP                |_C |_B     , /* ! */
 	         _F             |_B     , /* " */

@@ -55,7 +55,7 @@ void Max7219::setNumber(int32_t number, uint8_t offset, uint8_t minimumDigits) {
     
     uint8_t i = offset;
     do {
-      uint8_t data = SevenSegmentASCII[(number % 10)+'0'-32];
+      uint8_t data = pgm_read_byte(&SevenSegmentASCII[(number % 10)+'0'-32]);
       content[i--] = data;
       number /= 10;
       if(minimumDigits) {
@@ -64,7 +64,7 @@ void Max7219::setNumber(int32_t number, uint8_t offset, uint8_t minimumDigits) {
     } while (number && i);
     
     while(minimumDigits && i) {
-      content[i--] = SevenSegmentASCII['0'-32];
+      content[i--] = pgm_read_byte(&SevenSegmentASCII['0'-32]);
       minimumDigits--;
     }
     
@@ -80,7 +80,7 @@ void Max7219::setRawChar(int8_t data, uint8_t offset) {
 void Max7219::setString(const char *str, uint8_t startAt) {
   uint8_t i = 0;
   while(((startAt + i) < 8) && i < strlen(str)) {
-    content[startAt+i] = SevenSegmentASCII[str[i]-32];
+    content[startAt+i] = pgm_read_byte(&SevenSegmentASCII[str[i]-32]);
     i++;
   }
 }
