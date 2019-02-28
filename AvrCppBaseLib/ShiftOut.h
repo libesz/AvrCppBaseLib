@@ -17,7 +17,7 @@ template<uint8_t SsPin> class ShiftOut {
   uint8_t data;
 public:
 	ShiftOut(): data(0) {
-  apply();
+    apply();
   }
 	~ShiftOut() {}
   void set(uint8_t index, bool state) {
