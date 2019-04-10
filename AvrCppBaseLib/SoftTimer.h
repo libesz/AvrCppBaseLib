@@ -28,7 +28,7 @@ public:
   SoftTimer(SoftTimerHandler *newHandler, bool useSet, bool useReset, bool useTimeout);
   void set(unsigned short value);
   void reset();
-  unsigned short get();
+  unsigned short get() const;
   void tick();
 };
 

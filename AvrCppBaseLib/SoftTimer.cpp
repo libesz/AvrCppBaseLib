@@ -35,7 +35,7 @@ void SoftTimer::reset() {
   remaining = 0;
 }
 
-unsigned short SoftTimer::get() {
+unsigned short SoftTimer::get() const {
   return remaining;
 }
 
